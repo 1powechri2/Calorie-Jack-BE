@@ -2,8 +2,12 @@
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   return knex('meal_foods').del()
-    .then(() => knex('meals').del())
-    .then(() => knex('foods').del())
+    .then(() => {
+      return knex('meals').del();
+    })
+    .then(() => {
+      return knex('foods').del();
+    })
 
     .then(() => {
       return Promise.all([
