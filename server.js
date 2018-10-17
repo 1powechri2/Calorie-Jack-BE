@@ -22,13 +22,34 @@ app.get('/', (request, response) => {
 
 app.get('/api/v1/meals', (request, response) => {
   database.raw(`
-      SELECT meals.id, meals.name, array_to_json
-      (array_agg(json_build_object('id', foods.id, 'name', foods.name, 'calories', foods.calories)))
-      AS foods
-      FROM meals
-      JOIN meal_foods ON meals.id = meal_foods.meal_id
-      JOIN foods ON meal_foods.food_id = foods.id
-      GROUP BY meals.id`)
+    SELECT meals.id, meals.name, array_to_json
+    (array_agg(json_build_object('id', foods.id, 'name', foods.name, 'calories', foods.calories)))
+    AS foods
+    FROM meals
+    JOIN meal_foods ON meals.id = meal_foods.meal_id
+    JOIN foods ON meal_foods.food_id = foods.id
+    GROUP BY meals.id`)
+  .then(meals => {
+    response.status(200).json(meals.rows);
+  })
+  .catch(error => {
+    response.status(500).json({ error });
+  })
+})
+
+app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
+  const mealId = request.params['meal_id']
+
+  database.raw(`
+    SELECT meals.id, meals.name, array_to_json
+    (array_agg(json_build_object('id', foods.id, 'name', foods.name, 'calories', foods.calories)))
+    AS foods
+    FROM meals
+    WHERE id=${mealId}
+    JOIN meal_foods ON meals.id = meal_foods.meal_id
+    JOIN foods ON meal_foods.food_id = foods.id
+    GROUP BY meals.id
+    `)
   .then(meals => {
     response.status(200).json(meals.rows);
   })
@@ -61,7 +82,22 @@ app.post('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
   .catch(error => {
     response.status(500).json({ error });
   })
-})
+});
+
+app.delete('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
+  const mealId = request.params['meal_id'];
+  const foodId = request.params['id'];
+
+  database.raw(`
+    DELETE FROM meal_foods WHERE meal_foods.meal_id = ${mealId} AND meal_foods.food_id = ${foodId};
+  `)
+  .then(() => {
+    response.status(200).json( {"message": `Successfully Deleted`} );
+  })
+  .catch(error => {
+    response.status(500).json({ error });
+  })
+});
 
 app.get('/api/v1/foods', (request, response) => {
   database('foods').select().orderBy('id')
