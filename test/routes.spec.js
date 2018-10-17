@@ -39,7 +39,8 @@ describe('API Routes', () => {
       .catch(error => {
         throw error;
       });
-  })
+  });
+
   beforeEach((done) => {
     database.seed.run()
       .then(() => done())
@@ -47,6 +48,29 @@ describe('API Routes', () => {
         throw error;
       });
   });
+
+  it('Check Root', done => {
+    chai.request(server)
+    .get('/')
+    .end((err, response) => {
+      response.should.have.status(200);
+      response.should.be.html;
+      response.res.text.should.equal('Hello, Dolly');
+      done();
+    });
+  });
+
+  it('GET /api/v1/meals', done => {
+    chai.request(server)
+    .get('/api/v1/meals')
+    .end((err, response) => {
+      response.should.have.status(200);
+      response.should.be.json; 
+      done();
+    })
+  })
+});
+=======
   describe('GET /api/v1/foods', () => {
     it('should return all of the foods', done => {
       chai.request(server)
