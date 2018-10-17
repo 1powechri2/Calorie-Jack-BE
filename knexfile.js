@@ -12,7 +12,7 @@ module.exports = {
     seeds: {
       directory: './db/seeds.dev'
     }
-  }
+  },
 
   production: {
     client: 'pg',
@@ -24,5 +24,4 @@ module.exports = {
       directory: './db/seeds.dev'
     },
   useNullAsDefault: true
-  }
 }
