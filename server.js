@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
+const cors = require('cors');
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -9,6 +10,7 @@ const database = require('knex')(configuration);
 let mealRow;
 let foodRow;
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 app.set('port', process.env.PORT || 8080);
@@ -73,7 +75,7 @@ app.post('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
   database.raw(`
     INSERT INTO meal_foods (meal_id, food_id)
     VALUES (${mealId}, ${foodId});`)
-  .then((stuff) => {
+  .then(() => {
     response.status(200).json( {"message": `Successfully added ${foodRow.name} to ${mealRow.name}`} );
   })
   .catch(error => {
