@@ -45,13 +45,12 @@ app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
     (array_agg(json_build_object('id', foods.id, 'name', foods.name, 'calories', foods.calories)))
     AS foods
     FROM meals
-    WHERE id=${mealId}
     JOIN meal_foods ON meals.id = meal_foods.meal_id
     JOIN foods ON meal_foods.food_id = foods.id
-    GROUP BY meals.id
-    `)
+    WHERE meals.id = ${mealId}
+    GROUP BY meals.id`)
   .then(meals => {
-    response.status(200).json(meals.rows);
+    response.status(200).json(meals.rows[0]);
   })
   .catch(error => {
     response.status(500).json({ error });
