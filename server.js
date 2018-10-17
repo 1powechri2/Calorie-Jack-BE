@@ -8,7 +8,8 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
-const pry = require('pryjs');
+let mealRow;
+let foodRow;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -18,25 +19,48 @@ app.locals.title = 'calorie_jack';
 app.get('/', (request, response) => {
   response.send('Hello, Dolly');
 });
-//
-// app.get('/api/v1/meals', (request, response) => {
-//   database.raw(`
-//       SELECT meals.id, meals.name, array_to_json
-//       (array_agg(json_build_object('id', foods.id, 'name', foods.name, 'calories', foods.calories)))
-//       AS foods
-//       FROM meals
-//       JOIN meal_foods ON meals.id = meal_foods.meal_id
-//       JOIN foods ON meal_foods.food_id = foods.id
-//       GROUP BY meals.id`)
-//   .then(meals => {
-//     response.status(200).json(meals)
-//   })
-// })
 
 app.get('/api/v1/meals', (request, response) => {
-  database.select('meals.id', 'meals.name', 'foods.id', 'foods.name', 'foods.calories')
-  .from('meals')
-  .join('meal_foods', ())
+  database.raw(`
+      SELECT meals.id, meals.name, array_to_json
+      (array_agg(json_build_object('id', foods.id, 'name', foods.name, 'calories', foods.calories)))
+      AS foods
+      FROM meals
+      JOIN meal_foods ON meals.id = meal_foods.meal_id
+      JOIN foods ON meal_foods.food_id = foods.id
+      GROUP BY meals.id`)
+  .then(meals => {
+    response.status(200).json(meals.rows);
+  })
+  .catch(error => {
+    response.status(500).json({ error });
+  })
+})
+
+app.post('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
+  const mealId = request.params['meal_id'];
+  const foodId = request.params['id'];
+
+  database.raw(`
+    SELECT * FROM meals WHERE id=${mealId};`)
+    .then(meal => {
+      mealRow = meal.rows[0]
+    })
+  database.raw(`
+    SELECT * FROM foods WHERE id=${foodId};`)
+    .then(food => {
+      foodRow = food.rows[0]
+    })
+
+  database.raw(`
+    INSERT INTO meal_foods (meal_id, food_id)
+    VALUES (${mealId}, ${foodId});`)
+  .then((stuff) => {
+    response.status(200).json( {"message": `Successfully added ${foodRow.name} to ${mealRow.name}`} );
+  })
+  .catch(error => {
+    response.status(500).json({ error });
+  })
 })
 
 app.get('/api/v1/foods', (request, response) => {
