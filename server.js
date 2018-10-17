@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 
-const pry = require('pryjs')
-
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
@@ -33,11 +31,11 @@ app.get('/', (request, response) => {
 //   })
 // })
 
-app.get('/api/v1/meals', (request, response) => {
-  database.select('meals.id', 'meals.name', 'foods.id', 'foods.name', 'foods.calories')
-  .from('meals')
-  .join('meal_foods', ())
-})
+// app.get('/api/v1/meals', (request, response) => {
+//   database.select('meals.id', 'meals.name', 'foods.id', 'foods.name', 'foods.calories')
+//   .from('meals')
+//   .join('meal_foods', ())
+// })
 
 app.get('/api/v1/foods', (request, response) => {
   database('foods').select().orderBy('id')
@@ -53,10 +51,13 @@ app.get('/api/v1/foods/:id', (request, response) => {
   const id = request.params.id
   database("foods").where("id", id).select("*", ['id', 'name', 'calories'])
   .then(food => {
-    response.status(201).json({ id: food[0]['id'], name: food[0]['name'], calories: food[0]['calories'] })
+    response.status(200).json({
+      id: food[0]['id'],
+      name: food[0]['name'],
+      calories: food[0]['calories'] })
   })
   .catch(error => {
-    response.status(500).json({ error })
+    response.status(404).json({ error })
   })
 })
 
@@ -87,7 +88,7 @@ app.patch('/api/v1/foods/:id', (request, response) => {
     response.status(200).json({ message: `Food with id: ${id} was successfully updated` })
   })
   .catch(error => {
-    response.status(500).json({ error })
+    response.status(400).json({ message: `Food with id: ${id} does not exist` })
   })
 })
 
@@ -99,7 +100,7 @@ app.delete('/api/v1/foods/:id', (request, response) => {
     response.status(200).json({ message: `Food with id: ${id} was successfully deleted`})
   })
   .catch(error => {
-    response.status(500).json({ error })
+    response.status(404).json({ error })
   })
 })
 
