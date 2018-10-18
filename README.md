@@ -3,7 +3,7 @@
 
 This project is the Back-End for CalorieJack, a calorie tracking app. The Front-End is hosted at https://duranangela.github.io/quantified-self-fe.
 
-This project is an Espress API which uses a Postgres database and is hosted at https://still-dusk-48291.herokuapp.com/
+This project is an Express API which uses a Postgres database and is hosted at https://still-dusk-48291.herokuapp.com/
 
 The endpoints are as follows:
 
@@ -27,4 +27,4 @@ npm start
 ```
 You will then be able to visit the endpoints using localhost:8080.
 
-If you would like to run the test suite, please run `mocha --exit`. Note that currently this may wipe any changes you have made to the database, but will hopefully be fixed soon.
+If you would like to run the test suite, please run `mocha --exit`. Note that currently this may wipe any changes you have made to your database, but will hopefully be fixed soon.
