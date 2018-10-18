@@ -6,7 +6,9 @@ exports.seed = function(knex, Promise) {
     knex('meal_foods').insert({
       food_id: 2, meal_id: 2}, 'id'),
     knex('meal_foods').insert({
-      food_id: 3, meal_id: 3}, 'id')
+      food_id: 3, meal_id: 3}, 'id'),
+    knex('meal_foods').insert({
+      food_id: 4, meal_id: 4}, 'id')
     .then(() => console.log('Seeding meal_foods complete'))
     .catch(error => console.log(`Error seeding meal_foods data: ${error}`))
   ])

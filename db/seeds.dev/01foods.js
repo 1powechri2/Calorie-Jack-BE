@@ -16,7 +16,9 @@ exports.seed = function(knex, Promise) {
         knex('foods').insert({
           id: 2, name: 'apple', calories: 220 }, 'id'),
         knex('foods').insert({
-          id: 3, name: 'Granola Bar', calories: 300 }, 'id')
+          id: 3, name: 'Granola Bar', calories: 300 }, 'id'),
+        knex('foods').insert({
+          id: 4, name: 'Potato Crisps', calories: 300 }, 'id')
         .then(() => console.log('Seeding Foods complete'))
         .catch(error => console.log(`Error seeding foods data: ${error}`))
     ])
