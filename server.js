@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 const cors = require('cors');
-require('dotenv').config();
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -12,11 +11,12 @@ let mealRow;
 let foodRow;
 
 app.use(function(req, res, next) {
-      req.header(“Access-Control-Allow-Origin”, “*”);
-      req.header(“Access-Control-Allow-Headers”, “Origin, X-Requested-With, Content-Type, Accept”);
-      req.header(‘Access-Control-Allow-Methods’, ‘PATCH, POST, GET, DELETE, OPTIONS’);
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      res.header('Access-Control-Allow-Methods', 'PATCH, POST, GET, DELETE, OPTIONS');
          next();
    });
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 app.set('port', process.env.PORT || 8080);
