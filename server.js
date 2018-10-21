@@ -10,7 +10,11 @@ const database = require('knex')(configuration);
 let mealRow;
 let foodRow;
 
-app.options('/api/v1/foods/:id', cors()) // enable pre-flight request for DELETE request
+app.use(cors({
+  origin: 'http://yourapp.com',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: true
+}));
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "https://duranangela.github.io");
 //   res.header("Access-Control-Allow-Methods", "POST, PUT, DELETE, PATCH");
