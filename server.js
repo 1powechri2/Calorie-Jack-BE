@@ -15,15 +15,6 @@ app.use(cors({
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false
 }));
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "https://duranangela.github.io");
-//   res.header("Access-Control-Allow-Methods", "POST, PUT, DELETE, PATCH");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
