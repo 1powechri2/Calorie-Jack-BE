@@ -10,8 +10,6 @@ const database = require('knex')(configuration);
 let mealRow;
 let foodRow;
 
-app.use(cors());
-
 app.use(cors({
   origin: 'https://duranangela.github.io'
 }));
