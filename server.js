@@ -10,7 +10,7 @@ const database = require('knex')(configuration);
 let mealRow;
 let foodRow;
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "POST, PUT, DELETE, PATCH");
   res.header(
