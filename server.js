@@ -10,9 +10,12 @@ const database = require('knex')(configuration);
 let mealRow;
 let foodRow;
 
-var corsOptions = {
+app.use(cors({
   origin: 'https://duranangela.github.io',
-}
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false
+}));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -143,7 +146,7 @@ app.post('/api/v1/foods', (request, response) => {
   })
 });
 
-app.patch('/api/v1/foods/:id', cors(corsOptions), (request, response) => {
+app.patch('/api/v1/foods/:id', cors(), (request, response) => {
   const id = request.params.id
   const foodData = request.body
 
