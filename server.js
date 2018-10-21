@@ -11,7 +11,7 @@ let mealRow;
 let foodRow;
 
 app.use(cors({
-  origin: 'https://duranangela.github.io',
+  origin: '*',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false
 }));
