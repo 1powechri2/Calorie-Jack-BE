@@ -10,10 +10,7 @@ const database = require('knex')(configuration);
 let mealRow;
 let foodRow;
 
-app.use(cors({
-  origin: 'https://duranangela.github.io'
-}));
-
+app.options('/api/v1/foods/:id', cors()) // enable pre-flight request for DELETE request
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "https://duranangela.github.io");
 //   res.header("Access-Control-Allow-Methods", "POST, PUT, DELETE, PATCH");
@@ -153,7 +150,7 @@ app.post('/api/v1/foods', (request, response) => {
   })
 });
 
-app.patch('/api/v1/foods/:id', (request, response) => {
+app.patch('/api/v1/foods/:id', cors(), (request, response) => {
   const id = request.params.id
   const foodData = request.body
 
