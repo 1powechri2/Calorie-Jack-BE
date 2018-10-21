@@ -13,7 +13,7 @@ let foodRow;
 app.use(cors({
   origin: 'https://duranangela.github.io',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: true
+  preflightContinue: false
 }));
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "https://duranangela.github.io");
