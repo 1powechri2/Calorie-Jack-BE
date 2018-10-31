@@ -70,7 +70,7 @@ describe('API Routes', () => {
     })
   })
 });
-=======
+
   describe('GET /api/v1/foods', () => {
     it('should return all of the foods', done => {
       chai.request(server)
